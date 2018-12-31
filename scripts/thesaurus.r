@@ -14,3 +14,28 @@ Compose <- function(x, ...)
 }
 
 sapply(ds, Compose, length,unique)
+
+
+# ---- combine-subset ------------------------------
+a <- c("A", "B", "C", "G")
+b <- c("C", "D", "E", "G")
+c <- c("A", "D", "F", "G")
+
+
+# combine & remove common elements
+union(a, b)
+union(a, c)
+union(b, c)
+
+# combine & keep ONLY common elements (remove unique)
+intersect(a, b)
+intersect(a, c)
+intersect(b, c)
+
+# keep only elements common to all vectors
+Reduce(intersect, list(a, b, c))
+
+# keep  unique to the first vector / remove duplicates in the second vector
+setdiff(a, b)
+setdiff(a, c)
+setdiff(b, c)
