@@ -73,3 +73,7 @@ sandbox/thumbnails/thumbnails.html
 sandbox/thumbnails/thumbnails.md
 sandbox/thumbnails/thumbnails.md
 data-public/derived/example-for-graph-making.rds
+data-public/.DS_Store
+data-public/raw/.DS_Store
+suppress-for-release.Rproj
+suppress-for-release.Rproj
