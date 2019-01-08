@@ -162,6 +162,7 @@ detect_small_cell <- function(
   )
   return(d_small)
 }
+
 # usage
 # d_small_cell <- df %>% detect_small_cell()
 # creates a replica of the data, with count values are replaced by TRUE/FALSE according to test
@@ -438,8 +439,8 @@ detect_single_suppression_draconian <- function(
 
 # function to elongate (value column in the)  smallest decision frame
 elongate_values <- function( 
-  d                 # data frame with a single Decision Unit
-  ,regex = "_[MTF]$" # regular expression used to select variables with counts
+  d                 # data frame with a single Decision Unit # data frame in wide format
+  ,regex = "_[MTF]$" # regular expression used to select variables with counts #selecting varibles ending in _MTF
 ){
   d_wide <- d # reminder that a wide format is expected
   # split variables into counts and labels

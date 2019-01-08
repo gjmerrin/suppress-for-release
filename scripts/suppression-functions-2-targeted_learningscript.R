@@ -441,9 +441,13 @@ detect_single_suppression_draconian <- function(
 elongate_values <- function( 
   d                 # data frame with a single Decision Unit 
   # data frame in wide format
-  ,regex = "_[MTF]$" # regular expression used to select variables with counts 
+  ,regex = "_[MTF]$" # regular expression used to select variables with counts # default value
   #selecting varibles ending in _MTF - defined regular expression pattern to be used in grep
 ){
+  # values for testing and development
+  # d <- df 
+  # regex = "_[MTF]$" 
+  
   d_wide <- d # reminder that a wide format is expected 
   #naming data set
   # split variables into counts and labels #args(grep) 
@@ -457,8 +461,9 @@ elongate_values <- function(
   # convert from wide to long 
   d_long <- d_wide %>% 
     #args(tidyr::gather_) - gather makes wide data long first argument is data which is done above
-    #function (data, key_col, value_col, gather_cols
-    tidyr::gather_("column_name","value",c( count_variables)) %>%
+    #function (data, key_col, value_col, gather_cols args(tidyr::gather_) #gather_ - underscore allows us to pass standard evaluation
+    tidyr::gather_("column_name","value",c(count_variables)) %>%
+    
     dplyr::mutate( # split column_name into individual variables
       #gsub - replaces all matches of a string
       agg_level = gsub("^(\\w+)_(\\w+)$", "\\1", column_name) # aggregation level #gets Province
