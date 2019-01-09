@@ -53,8 +53,8 @@ ds0 %>% class
 
 ds1 <- ds0 %>% 
   dplyr::select_(.dots = select_variables) %>% 
-  dplyr::filter(SUBNO %in% 1003) #subset first 3 cases
-  #dplyr::filter(SUBNO %in% 1001:1003) #subset first 3 cases
+  #dplyr::filter(SUBNO %in% 1003) #subset first 3 cases
+  dplyr::filter(SUBNO %in% 1001:1003) #subset first 3 cases
 
 ds1 %>% dplyr::glimpse(50)
 
@@ -166,3 +166,6 @@ ds2_long <- ds1 %>%
 #     variables_static = c("SUBNO")
 #     , regex_pattern = "(\\w+)_(\\d+)"
 #   )
+
+# write a csv to a folder 
+#ds1 %>% readr::write_csv ("./data-unshared/example1.csv")
