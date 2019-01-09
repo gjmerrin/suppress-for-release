@@ -101,6 +101,7 @@ ds1 %>% dplyr::glimpse(50)
 # approach 3
 # involves creating a function with targeting facility
 
+# first version has only one argument (data) and is the most rigid
 elongate_1 <- function(
   d # input data set in wide form
   # ,variables_static
@@ -126,13 +127,47 @@ elongate_1 <- function(
     tidyr::spread("key", "value")
   return(d1)
 } # how to use
-ds2_long <- ds1 %>% elongate_1() # note ds1 is in wide with respect to wave
+# ds2_long <- ds1 %>% elongate_1() # note ds1 is in wide with respect to wave
+
+# second version will require 
+# 1) definition of static variabesl and 
+# 2) regex that governs the elongation
+elongate_2 <- function(
+  d # input data set in wide form
+  ,variables_static  # character vector of variable names
+  ,regex_pattern # regular expression governing the elongation
+){
+  # values for testing and development
+  # d <- ds1
+  # variables_static = c("SUBNO","FEMALE","RACE")
+  # regex_pattern = "(\\w+)_(\\d+)"
+  # 
+  # create vectors to store variable names
+  (varnames <- names(d))
+  # all variables not passed to the argumet variable_static
+  # will be treated as dynamic. Will produce error if omitted. 
+  (variables_dynamic <- setdiff(varnames, variables_static))
+  
+  # perform the transformations
+  d1 <- d %>% 
+    # elongate with respect to wave
+    tidyr::gather("key","value", variables_dynamic) %>% # use with caution
+    dplyr::mutate(
+      wave = gsub(pattern = regex_pattern, replacement = "\\2", x = key)
+      ,key = gsub(pattern = regex_pattern, replacement = "\\1", x = key)
+    ) %>% 
+    # widen with respect to elongated measures
+    tidyr::spread("key", "value")
+  return(d1)
+} # how to use
+# ds2_long <- ds1 %>% 
+#   elongate_2(
+#     variables_static = c("SUBNO","FEMALE","RACE")
+#     ,regex_pattern   = "(\\w+)_(\\d+)"
+#   ) # note ds1 is in wide with respect to wave
 
   
-  
-  
-  
-  
+
   
   
   

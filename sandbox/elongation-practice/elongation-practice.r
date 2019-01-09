@@ -58,74 +58,52 @@ ds1 <- ds0 %>%
 
 ds1 %>% dplyr::glimpse(50)
 
-# ----- manual-elongation ----------------------------
+# ----- elongate-function ----------------------------
 
 # approach 1
-# ds2_wide <- ds1 %>% 
-#   tidyr::gather(key = "key", value = "value", 
-#                 AGE_0, AGE_1, AGE_2, AGE_3, AGE_4, AGE_5, AGE_6) %>% 
-#   dplyr::mutate(
-#     age = value,
-#     wave = gsub(pattern = "AGE_(\\d+)", replacement = "\\1", x = key) 
-#   ) %>% 
-#   dplyr::arrange(SUBNO)
-# 
-# View(ds2_wide)
-# 
-# # appraoch 2 
-# varnames <- names(ds1)
-# (variables_static <- c("SUBNO", "FEMALE", "RACE"))
-# (variables_dynamic <- setdiff(varnames, variables_static))
-# 
-# ds2_wide <- ds1 %>% 
-#   tidyr::gather(key = "key", value = "value", variables_dynamic) %>% 
-#   dplyr::mutate(
-#      spread_var  = gsub(pattern = "(\\w+)_(\\d+)", replacement = "\\1", x = key)
-#     ,wave        = gsub(pattern = "(\\w+)_(\\d+)", replacement = "\\2", x = key)
-#   ) %>% 
-#   dplyr::select(-key) %>% 
-#   tidyr::spread(key = "spread_var", value = "value")
-# 
-# # alt 2 
-# varnames <- names(ds1)
-# (variables_static <- c("SUBNO", "FEMALE", "RACE"))
-# (variables_dynamic <- setdiff(varnames, variables_static))
-# 
-# ds2_wide <- ds1 %>%
-#   tidyr::gather(key = "key", value = "value", variables_dynamic) %>%
-#   dplyr::mutate(
-#     wave = gsub(pattern = "(\\w+)_(\\d+)", replacement = "\\2", x = key)
-#     ,key = gsub(pattern = "(\\w+)_(\\d+)", replacement = "\\1", x = key)
-#   ) %>%
-#   tidyr::spread("key", "value")
+ds2_wide <- ds1 %>% 
+  tidyr::gather(key = "key", value = "value", 
+                AGE_0, AGE_1, AGE_2, AGE_3, AGE_4, AGE_5, AGE_6) %>% 
+  dplyr::mutate(
+    age = value,
+    wave = gsub(pattern = "AGE_(\\d+)", replacement = "\\1", x = key) 
+  ) %>% 
+  dplyr::arrange(SUBNO)
 
-# ----- elongate-function ----------------------------
-# approach 3 - will create a function 
+View(ds2_wide)
+
+# appraoch 2 
+varnames <- names(ds1)
+(variables_static <- c("SUBNO", "FEMALE", "RACE"))
+(variables_dynamic <- setdiff(varnames, variables_static))
+
+ds2_wide <- ds1 %>% 
+  tidyr::gather(key = "key", value = "value", variables_dynamic) %>% 
+  dplyr::mutate(
+     spread_var = gsub(pattern = "(\\w+)_(\\d+)", replacement = "\\1", x = key)
+    ,wave        = gsub(pattern = "(\\w+)_(\\d+)", replacement = "\\2", x = key)
+  ) %>% 
+  dplyr::select(-key) %>% 
+  tidyr::spread(key = "spread_var", value = "value")
+
+# alt 2 
+ds2_wide <- ds1 %>% 
+  tidyr::gather(key = "key", value = "value", variables_dynamic) %>% 
+  dplyr::mutate(
+    wave = gsub(pattern = "(\\w+)_(\\d+)", replacement = "\\2", x = key)
+    ,key = gsub(pattern = "(\\w+)_(\\d+)", replacement = "\\1", x = key)
+  ) %>% 
+  tidyr::spread("key", "value")
+
+# approach 3
 
 # first version has only one arguement (data) and is the most rigid
 elongate_1 <- function(
   d # input dataset in wide form
-#  , variables_static
-#  , variables_dynamic
+  , long_variables
 ) {
-  # values for testing and development
-#  d <- ds1
   
-  #create vectors to store variable names
-  varnames <- names(d)
-  (variables_static <- c("SUBNO", "FEMALE", "RACE"))
-  (variables_dynamic <- setdiff(varnames, variables_static))
-  # performs the transformations
-  d1 <- d %>% 
-    tidyr::gather(key = "key", value = "value", variables_dynamic) %>% 
-    dplyr::mutate(
-      wave = gsub(pattern = "(\\w+)_(\\d+)", replacement = "\\2", x = key)
-      ,key = gsub(pattern = "(\\w+)_(\\d+)", replacement = "\\1", x = key)
-    ) %>% 
-    tidyr::spread("key", "value")
-  return(d1)
-} # how to use - the intended use
-ds2 <- ds1 %>% elongate_1() # not ds1 is in wide format with respect to wave
+}
 
 # second version will require 
 # 1) definition of the static variables and 
