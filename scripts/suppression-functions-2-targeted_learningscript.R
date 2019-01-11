@@ -486,6 +486,10 @@ elongate_labels <- function(
   ,varnames # names of the variables (aggregation levels), which need to be elongated
 ){
   d_wide <- d # reminder that a wide format is expected
+  # values for testing and development
+  # d <- df
+  # varnames <- c("label_prov", "label_ha","label_hsda")
+  
   # split variables into counts and labels
   (count_variables <- grep("_[MFT]$",names(d_wide), value = T))
   (label_variables <- varnames)
@@ -501,7 +505,7 @@ elongate_labels <- function(
     dplyr::bind_cols(d_label_values) %>% 
     tidyr::gather_("agg_level", "value", gsub("^label_", "value_",label_variables)) %>% 
     dplyr::mutate(  
-      agg_level  = gsub("^value_","",agg_level)
+       agg_level = gsub("^value_","",agg_level)
       ,agg_level  = toupper(agg_level)
       ,agg_level  = factor(agg_level,  levels = c("PROV","HA","HSDA")) 
     )
@@ -643,7 +647,7 @@ prepare_for_tiling <- function(
     ) %>%
     # make columns into factors to enforce order and aesthetic mapping
     dplyr::mutate(   
-      label_hsda = factor(label_hsda, levels = lkp_hsda$label_hsda) 
+       label_hsda = factor(label_hsda, levels = lkp_hsda$label_hsda) 
       ,label_ha   = factor(label_ha,   levels = lkp_ha$label_ha)
       ,label_hsda = factor(label_hsda, levels = rev(levels(label_hsda)) )
       ,label_ha   = factor(label_ha,   levels = rev(levels(label_ha)))
@@ -659,7 +663,7 @@ prepare_for_tiling <- function(
   # d_long_values <- d %>% elongate_values(regex = "_[MTF]$") %>% 
   d_long_values <- d %>% combine_logical_tests() %>% 
     dplyr::mutate(     
-      label_hsda = factor(label_hsda, levels = lkp_hsda$label_hsda) 
+       label_hsda = factor(label_hsda, levels = lkp_hsda$label_hsda) 
       ,label_ha   = factor(label_ha,   levels = lkp_ha$label_ha)
       ,label_hsda = factor(label_hsda, levels = rev(levels(label_hsda)) )
       ,label_ha   = factor(label_ha,   levels = rev(levels(label_ha)))
@@ -671,8 +675,8 @@ prepare_for_tiling <- function(
   
   #(4)######## Aseemble the output = list object
   l <- list(
-    "disease"   = disease
-    ,"year"     = year
+    "disease"      = disease
+    ,"year"        = year
     ,"labels_long" = d_long_labels 
     ,"values_long" = d_long_values 
   )
@@ -749,9 +753,9 @@ make_tile_graph <- function(
   censor_colors = c(
      "0-none"              = NA
     ,"1-small-cell"        = "#fc8d62" # red
-    ,"2-recalc-triplet"   = "#66c2a5" # green
-    ,"3-single-sup"       = "#8da0cb" # blue
-    ,"3-single-sup-draco" = "grey90" 
+    ,"2-recalc-triplet"    = "#66c2a5" # green
+    ,"3-single-sup"        = "#8da0cb" # blue
+    ,"3-single-sup-draco"  = "grey90" 
   )
   
   g <- l$values_long %>%  
@@ -763,7 +767,7 @@ make_tile_graph <- function(
     ) %>% 
     ggplot2::ggplot(
       aes_string(
-        x     = "sex"
+         x     = "sex"
         ,y     = "label_hsda"
         ,label = "value" 
       )
