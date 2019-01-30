@@ -25,7 +25,7 @@ requireNamespace("rmarkdown")
 path_input <- "./data-public/raw/fictional-cases/flower-deafness-all-years.csv"
 path_region_map <- "./data-public/raw/bc-health-system-map.csv"
 
-baseSize = 10
+baseSize = 10 # standard fort size for reports and graphs
 # ---- utility-functions ----------------------------------------------------- 
 # functions, the use of which is localized to this script
 
