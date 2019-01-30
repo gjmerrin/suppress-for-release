@@ -37,7 +37,7 @@ path_save           <- "./data-unshared/derived/dto-0-greeted"
 # functions, the use of which is localized to this script
 
 # ---- load-data ---------------------------------------------------------------
-ds0             <- readr::read_csv(path_input) %>% as.data.frame() %>% tibble::as_tibble()
+ds0            <- readr::read_csv(path_input) %>% as.data.frame() %>% tibble::as_tibble()
 bc_health_map  <- readr::read_csv(path_region_map)
 fictional_case <- readr::read_csv(path_fictional_case)
 
@@ -102,16 +102,16 @@ ds <- ds0 %>%
 #   dplyr::arrange(n)
 # ds_test %>% print(n = nrow(.))
 
-# what does the data look at this point for a single frame of analysis?
+# what does the data look like at this point for a single frame of analysis?
 ds %>% 
   dplyr::filter(
-    # disease ==  "Parkinsonism" # disease + year = FRAME
-    disease ==  "Flower Deafness" # disease + year = FRAME
-    ,year    ==  "2001"            # disease + year = FRAME
+    # disease ==  "Parkinsonism"     # disease + year = FRAME
+    disease   ==  "Flower Deafness"  # disease + year = FRAME
+    ,year     ==  "2001"             # disease + year = FRAME
   ) %>% 
   print(n=nrow(.))
 
-# before we do anything with it, it is important or reflect that 
+# before we do anything with it, it is important to reflect that 
 # THIS is the state of the data that should result at the end of mechanized suppression
 # the whole point, the TARGET deliverable is just one additional column/field
 # logical vector, indicating decision to suppress (TRUE) or not to suppress (FALSE)
@@ -134,7 +134,7 @@ dto[["FRAMED"]] <- list() # a shell to hold the frames of different content
 dto[["FRAMED"]][["raw"]] <- list() # the first element will break up the raw data into digestable frame
 
 # now we will deconstruct the flat data frame into a list object in which 
-#  level-1 components correspond to diseases and 
+# level-1 components correspond to diseases and 
 # level-2 componets correspond to the years for which we have surveillance data
 # Example:
 # disease A   # list
@@ -151,19 +151,19 @@ diseases_available <- ds %>%  # or dto[["raw]]
   dplyr::distinct(disease) %>% 
   as.list() %>% unlist() %>% as.character()
 # loop through available diseases
-for(disease_ in diseases_available){
+for(disease_i in diseases_available){
   # determine the years for which data is available for this disease
   years_available <- ds %>% 
-    dplyr::filter(disease == disease_) %>% 
+    dplyr::filter(disease == disease_i) %>% 
     dplyr::arrange(year) %>% 
     dplyr::distinct(year) %>% 
     as.list() %>% unlist() %>% as.character()
   # loop through available years
-  for(year_ in years_available ){
+  for(year_i in years_available ){
     d1 <- ds %>% 
-      dplyr::filter(disease == disease_) %>% 
-      dplyr::filter(year    == year_)
-    greeted_list[[disease_]][[year_]] <- d1
+      dplyr::filter(disease == disease_i) %>% 
+      dplyr::filter(year    == year_i)
+    greeted_list[[disease_i]][[year_i]] <- d1
   }
 }
 sapply(dto, names) 
