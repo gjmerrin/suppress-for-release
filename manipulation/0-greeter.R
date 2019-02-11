@@ -4,6 +4,7 @@
 #   output = "./manipulation/stitched_output/0-greeter.md"
 # )
 
+
 # This script inputs the raw data and prepares it for tuning.
 rm(list=ls(all=TRUE)) #Clear the memory of variables from previous run. 
 # This is not called by knitr, because it's above the first chunk.
