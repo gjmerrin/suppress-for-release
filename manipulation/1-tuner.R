@@ -26,7 +26,7 @@ requireNamespace("tidyr")
 # ---- declare-globals ---------------------------------------------------------
 # link to the source of the location mapping
 path_input          <- "./data-unshared/derived/dto-0-greeted.rds"
-path_fictional_case <- "./data-public/raw/fictional-cases/fictional-case-0.csv"
+# path_fictional_case <- "./data-public/raw/fictional-cases/fictional-case-0.csv"
 # test whether the file exists / the link is good
 testit::assert("File does not exist", base::file.exists(path_input))
 # declare where you will store the product of this script
@@ -84,18 +84,22 @@ dto[["FRAMED"]][["cleaned"]] <- dto[["FRAMED"]][["raw"]]
 dto[["FRAMED"]][["tuned"]]   <- dto[["FRAMED"]][["raw"]] 
 lapply(dto$FRAMED$tuned, names)
 
-for(disease_ in names(dto$FRAMED$raw)){
+diseases_available <- names(dto$FRAMED$raw)
+
+for(disease_i in diseases_available){
   # loop through available years
-  for(year_ in names(dto$FRAMED$raw[[disease_]]) ){
+  years_available <- names(dto$FRAMED$raw[[disease_i]])
+  
+  for(year_i in years_available){
     
     # create a long form to connect back to the raw
-    dto$FRAMED$cleaned[[disease_]][[year_]] <- 
-      dto$FRAMED$raw[[disease_]][[year_]] %>% 
-      clean_raw(stem = dstem)
+    dto$FRAMED$cleaned[[disease_i]][[year_i]] <- 
+      dto$FRAMED$raw[[disease_i]][[year_i]] %>% 
+      clean_raw()
     
-    # creat a wide form to connect to the logical test
-    dto$FRAMED$tuned[[disease_]][[year_]] <- 
-      dto$FRAMED$raw[[disease_]][[year_]] %>% 
+    # create a wide form to connect to the logical test
+    dto$FRAMED$tuned[[disease_i]][[year_i]] <- 
+      dto$FRAMED$raw[[disease_i]][[year_i]] %>% 
       tidy_frame(stem = dstem)
   }
 }
